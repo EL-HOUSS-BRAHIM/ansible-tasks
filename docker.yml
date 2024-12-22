@@ -1,0 +1,62 @@
+---
+- hosts: all
+  become: true
+
+  tasks:
+    - name: Install python3-apt (required for Ansible)
+      apt:
+        name: python3-apt
+        state: present
+
+    - name: Install aptitude
+      apt:
+        name: aptitude
+        state: latest
+        update_cache: yes
+        force_apt_get: yes
+
+    - name: Install system packages
+      apt:
+        name: "{{ item }}"
+        state: latest
+        update_cache: yes
+      loop:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - software-properties-common
+        - python3-pip
+        - virtualenv
+        - python3-setuptools
+
+    - name: Docker GPG apt Key Adding
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Adding Docker Repo
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release | lower }} stable"
+
+    - name: Update apt and install docker-ce
+      apt:
+        update_cache: yes
+        name: docker-ce
+        state: latest
+
+    - name: Install Docker Module for Python in virtual environment
+      pip:
+        name: docker
+        virtualenv: /home/ubuntu/ansible-docker-venv
+        virtualenv_python: python3
+
+    - name: Pull hello-world image
+      docker_image:
+        name: hello-world
+        source: pull
+
+    - name: Create Hello World container
+      docker_container:
+        name: hello-world
+        image: hello-world
+        state: started

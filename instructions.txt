@@ -1,0 +1,23 @@
+1. adhoc_commands.txt
+•	Purpose: Likely contains commonly used ad-hoc Ansible commands, such as ansible -m ping, which you used to test connectivity. It serves as a reference or quick script file for running immediate, one-off commands.
+2. ansible.cfg
+•	Purpose: Configuration file for Ansible. In your case, it appears to have been used to disable SSH key checking and to specify the inventory file. This ensures smoother interaction with your target hosts during automation.
+3. aws_ec2.yml
+•	Purpose: A dynamic inventory configuration file for Ansible to interact with AWS. It uses the aws_ec2 plugin to fetch instances and group them dynamically based on tags, region, or other AWS attributes. This enables you to manage infrastructure dynamically instead of manually listing hosts.
+4. docker.yml
+•	Purpose: This playbook automates the installation of Docker on target hosts. It also pulls the hello-world Docker image and runs it as a container. It demonstrates setting up essential Docker prerequisites and verifies Docker functionality by running a container.
+5. inventory
+•	Purpose: A static inventory file that groups the two virtual machines you are managing. This file specifies the hostnames or IPs of target machines so Ansible can connect to them for automation tasks.
+6. script.sh
+•	Purpose: A bash script for installing Ansible on the control node. It updates the package manager, adds the necessary repository, and installs Ansible. This script simplifies Ansible installation.
+7. wordpress.yml
+•	Purpose: A playbook to deploy a WordPress site in a Docker container. It:
+o	Creates a Docker network.
+o	Sets up a MySQL container for the WordPress database.
+o	Configures environment variables to customize WordPress setup.
+o	Deploys WordPress using Docker.
+
+
+8. Dynamic Inventory Configuration (aws_ec2.yml variations)
+•	Purpose: Multiple files demonstrate your configuration of dynamic inventory to fetch host information from AWS EC2 using specific IAM credentials. This enables running playbooks dynamically on AWS instances without maintaining a static inventory file.
+

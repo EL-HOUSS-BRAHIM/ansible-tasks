@@ -1,0 +1,8 @@
+1. ansible -i inventory -m ping all
+2. ansible -i inventory -m apt -a "name=docker-ce state=present" web01,web02 --become
+3. ansible -i inventory -m service -a "name=docker state=started enabled=yes" web01,web02 --become
+4. ansible -i inventory -m docker_container -a "name=hello-world image=hello-world state=started" web01,web02 --become
+
+5. # Definition: A playbook is a YAML file containing one or more plays that define automation tasks
+
+6. ansible -i inventory -m docker_container -a "name=hello-world state=absent" web01,web02 --become

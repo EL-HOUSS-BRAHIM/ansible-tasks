@@ -1,0 +1,48 @@
+---
+- name: Deploy LEMP Stack with Docker
+  hosts: all
+  become: true
+  tasks:
+    - name: Install Docker dependencies
+      apt:
+        name: 
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+        update_cache: yes
+
+    - name: Create Docker network
+      docker_network:
+        name: lemp_network
+        state: present
+
+    - name: Deploy Nginx container
+      docker_container:
+        name: nginx
+        image: nginx:latest
+        state: started
+        ports:
+          - "80:80"
+        networks:
+          - name: lemp_network
+
+    - name: Deploy MySQL container
+      docker_container:
+        name: mysql
+        image: mysql:5.7
+        state: started
+        env:
+          MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
+          MYSQL_DATABASE: "{{ mysql_database }}"
+        networks:
+          - name: lemp_network
+
+    - name: Deploy PHP-FPM container
+      docker_container:
+        name: php
+        image: php:7.4-fpm
+        state: started
+        networks:
+          - name: lemp_network
